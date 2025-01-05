@@ -1,24 +1,30 @@
-import './App.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from './store/store.ts';
-import { increment, decrement, toggleDisplay } from './reducer/CountSlice.ts';
+import './App.css'
+import {useDispatch, useSelector} from "react-redux";
+import {useState} from "react";
+import {printName} from "./reducer/CustomerSlice.ts";
 
 function App() {
-    const count = useSelector((state: RootState) => state.counter.count);
-    const isCountVisible = useSelector((state: RootState) => state.counter.display);
+    const customer = useSelector(state => state.customer.name)
+
     const dispatch = useDispatch();
 
+    const [name, setName] = useState('');
+
     return (
-        <div>
-            {isCountVisible && <div>Count: {count}</div>}
-            <br />
-            <button onClick={() => dispatch(increment())}>Increment</button>
-            <button onClick={() => dispatch(decrement())}>Decrement</button>
-            <button onClick={() => dispatch(toggleDisplay())}>
-                {isCountVisible ? 'Hide Count' : 'Show Count'}
-            </button>
-        </div>
-    );
+        <>
+            <input type={"text"} placeholder={"Name : "} onChange={(e) => setName(e.target.value)} value={name}></input>
+
+            <br/>
+            <br/>
+
+            <button onClick={() => dispatch(printName(name))}>Print Name</button>
+
+            <br/>
+            <br/>
+
+            {customer}
+        </>
+    )
 }
 
-export default App;
+export default App
