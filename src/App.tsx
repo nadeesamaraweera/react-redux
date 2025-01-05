@@ -1,25 +1,31 @@
 import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import { Dashboard } from './pages/DashBoard';
+import { AddCustomer } from './pages/AddCustomer';
+import { UpdateCustomer } from './pages/UpdateCustomer';
+import { DeleteCustomer } from './pages/DeleteCustomer';
+import { RootLayout } from './component/RootLayout';
+import { Provider } from 'react-redux';
+import store from './store/store';  // Import Redux store
 
 function App() {
-    // Access Redux state and dispatch
-    const count = useSelector((state) => state.count); // Ensure you access the `count` property
-    const dispatch = useDispatch();
-
-    const [isCountVisible, setIsCountVisible] = useState(true);
+    const routes = createBrowserRouter([
+        {
+            path: '',
+            element: <RootLayout />,
+            children: [
+                { path: '', element: <Dashboard /> },
+                { path: '/add', element: <AddCustomer /> },
+                { path: '/delete', element: <DeleteCustomer /> },
+                { path: '/update', element: <UpdateCustomer /> },
+            ],
+        },
+    ]);
 
     return (
-        <div>
-            <h1>Counter App</h1>
-        {isCountVisible && <div>Count: {count}</div>}
-            <br />
-            <button onClick={() => dispatch({ type: 'INCREMENT', payload: 1 })}>Increment</button>
-            <button onClick={() => dispatch({ type: 'DECREMENT', payload: 1 })}>Decrement</button>
-            <button onClick={() => setIsCountVisible(!isCountVisible)}>
-                {isCountVisible ? 'Hide Count' : 'Show Count'}
-            </button>
-        </div>
+        <Provider store={store}>  {/* Wrap the app in the Provider */}
+            <RouterProvider router={routes} />
+        </Provider>
     );
 }
 
